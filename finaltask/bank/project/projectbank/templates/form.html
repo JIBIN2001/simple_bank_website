@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Page</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+                body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        form {
+            display: grid;
+            grid-gap: 10px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        .checkbox-group {
+            display: flex;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button[type="submit"] {
+            background-color: #28a745;
+        }
+
+        button[type="button"] {
+            margin-left: 10px;
+            background-color: #dc3545;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form method="post">
+            {% csrf_token %}
+            <!-- Form fields will be added here -->
+            <!-- ... -->
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="dob">DOB</label>
+            <input type="date" id="dob" name="dob" required>
+
+            <label for="age">Age</label>
+            <input type="number" id="age" name="age" required>
+
+            <label for="gender">Gender</label>
+            <input type="radio" id="male" name="gender" value="male" required>
+            <label for="male">Male</label>
+            <input type="radio" id="female" name="gender" value="female" required>
+            <label for="female">Female</label>
+            <input type="radio" id="other" name="gender" value="other" required>
+            <label for="other">Other</label>
+
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" required>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="address">Address</label>
+            <textarea id="address" name="address" required></textarea>
+
+            <label for="district">District</label>
+            <select id="district" name="district" required>
+                <option value="" disabled selected>Select District</option>
+                <option value="kochi">kochi</option>
+                <option value="Alappuzha">Alappuzha</option>
+                <option value="Thrissur">Thrissur</option>
+                <option value="kottayam">kottayam</option>
+                <option value="kollam">kollam</option>
+                <!-- Add more district options here -->
+            </select>
+
+            <label for="branch">Branch</label>
+            <select id="branch" name="branch" required>
+                <option value="" disabled selected>Select Branch</option>
+                <!-- Branch options will be populated dynamically based on the selected district -->
+            </select>
+
+            <label for="account-type">Account Type</label>
+            <select id="account-type" name="account-type" required>
+                <option value="" disabled selected>Select Account Type</option>
+                <option value="savings">Savings Account</option>
+                <option value="current">Current Account</option>
+                <!-- Add more account type options here -->
+            </select>
+
+            <label>Materials Provided</label>
+            <div class="checkbox-group">
+                <input type="checkbox" id="debit-card" name="materials" value="debit-card">
+                <label for="debit-card">Debit Card</label>
+                <input type="checkbox" id="credit-card" name="materials" value="credit-card">
+                <label for="credit-card">Credit Card</label>
+                <input type="checkbox" id="cheque-book" name="materials" value="cheque-book">
+                <label for="cheque-book">Cheque Book</label>
+                <!-- Add more material options here -->
+            </div>
+
+            <button type="submit">Submit</button>
+            <button type="button" onclick="location.href='{% url 'logout' %}'">logout</button>
+
+        </form>
+<!-- ... -->
+
+
+    </div>
+<script>
+        const districtSelect = document.getElementById('district');
+        const branchSelect = document.getElementById('branch');
+
+        // Define a mapping of districts to their respective branches
+        const branchesByDistrict = {
+            kochi: ['Marine Drive, Kochi', 'Willingdon Island','Fort Kochi','Mattancherry','Thoppumpady',],
+            Alappuzha: ['Cherthala', 'Haripad','Kayamkulam','Mavelikkara','Thumpoly',],
+            Thrissur: ['Chalakudy', 'Chavakkad','Guruvayur','Irinjalakuda','Kodungallur',],
+            kottayam: ['Changanassery', 'Erattupetta','Ettumanoor','Kanjirappally','Vaikom',],
+            kollam: ['Kadakkal', 'Karunagappalli','Kottarakkara','Kulathupuzha','Oachira',],
+            // Add more districts and their corresponding branches here
+        };
+
+        districtSelect.addEventListener('change', () => {
+            const selectedDistrict = districtSelect.value;
+            const branches = branchesByDistrict[selectedDistrict];
+
+            // Clear existing options
+            branchSelect.innerHTML = '<option value="" disabled selected>Select Branch</option>';
+
+            // Populate branch dropdown with the branches of the selected district
+            branches.forEach(branch => {
+                const option = document.createElement('option');
+                option.value = branch;
+                option.textContent = branch;
+                branchSelect.appendChild(option);
+            });
+        });
+
+        function logout() {
+            // Implement your logout functionality here
+            console.log('Logout clicked');
+        }
+    </script>
+</body>
+</html>
